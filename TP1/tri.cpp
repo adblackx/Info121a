@@ -22,36 +22,29 @@ int chercher_limite(int tab[], int n, int val) {
 int rechDicho(int tab[], int min, int max, int val) {
 	while (min < max) {
 		int mid = (min+max)/2;
-		if (tab[mid-1] < val && tab[mid] > val)
+		if (tab[mid-1] <= val && tab[mid] >= val)
 			return mid;
 		if (tab[mid] < val)
 			min = mid+1;
 		else 
 			max = mid-1;
 	}
-	return max;
+	return min;
 }
 
-/**void swap(int &a, int &b) {
-	int tmp = a;
-	a = b;
-	b = tmp;
-}**/
-
 void decaler(int tab[], int n, int idx) {
-	for (int i = n-2; i >= idx; i--) {
-		tab[i+1] = tab[i];
+	for (int i = n; i > idx; i--) {
+		tab[i] = tab[i-1];
 	}
 }
 
 void tri_insertion(int tab[], int n) {
 	for (int i = 1; i < n; i++) {
 		int nbr = tab[i];
-		int pos = chercher_limite(tab, i, nbr);
-		//int pos = rechDicho(tab, 0, i, nbr);
+		//int pos = chercher_limite(tab, i, nbr);
+		int pos = rechDicho(tab, 0, i, nbr);
 		decaler(tab, i, pos);
 		tab[pos] = nbr;
-		affiche_tableau(tab, n);
 	}
 }
 
