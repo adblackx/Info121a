@@ -54,8 +54,10 @@ int main() {
 	int tab[taille];
 	for (int i = 0; i < taille; i++)
 		tab[i] = rand() % 100;
+	cout << "Tableau non trié :\t";
 	affiche_tableau(tab, taille);
 	tri_insertion(tab, taille);
+	cout << "Tableau trié : \t\t";
 	affiche_tableau(tab, taille);
 	return 0;
 }
