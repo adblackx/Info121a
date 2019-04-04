@@ -48,12 +48,12 @@ void tri_insertion_rapide(list *l) {
 }
 
 int main() {
+	srand(time(NULL));
 	list *l = new_list();
-	add_head(l, 11);
-	add_end(l, 12);
-	add_head(l, 13);
-	add_head(l, 14);
-	add_head(l, 15);
+	int taille = rand()%50;
+	for (int i = 0; i < taille; i++) {
+		add_head(l, rand()%100);
+	}
 	show_list(l);
 	tri_insertion_rapide(l);
 	show_list(l);
