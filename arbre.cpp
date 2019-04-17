@@ -205,6 +205,12 @@ branch* recDel(branch *b, int val) {
 }
 
 void del(tree *t, int val) {
+	if(t -> root -> left == NULL){
+		t ->root = t-> root -> right;
+	}
+
+
+
 	recDel(t -> root, val);
 }
 
