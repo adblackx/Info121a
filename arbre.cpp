@@ -79,13 +79,13 @@ void addValRec(tree *t, int val) {
 }
 
 int searchMin(tree *t) {
-	/*branch *b = t -> root;
+	branch *b = t -> root;
 	while (b -> left != NULL) {
 		b = b -> left;
 	}
 
-	return b -> data;*/
-
+	return b -> data;
+/*
 	if (t -> root == NULL) return -1;
     branch *e =  t -> root;
     int min = t -> root -> data;
@@ -93,7 +93,7 @@ int searchMin(tree *t) {
         e = e -> left;
         min = e -> data;
     }
-    return min;
+    return min;*/
 }
 
 int recDeepness(branch *b) {
@@ -209,8 +209,6 @@ void del(tree *t, int val) {
 		t ->root = t-> root -> right;
 	}
 
-
-
 	recDel(t -> root, val);
 }
 
@@ -262,15 +260,19 @@ void tri(int tab[], int n){
 	}
 	cout << endl;
 	showTree(t);
-	
 	cout << endl;
 
-	for(int i=0; i<7;i++){
+	showTree(t);
+
+	for(int i=0; i<n;i++){
+
 		int minimum=searchMin(t);
 		cout<<minimum<<" ";
 		del(t, minimum);
+		//showTree(t);
+
 	}
-		showTree(t);
+	//showTree(t);
 
 	cout << endl;
 }
@@ -298,11 +300,15 @@ int main() {
 
 	cout<<searchMin(t);*/
 
-	 int taille=10;
-	int tab[taille]={3,1,2,5,4,9,7,9,8,4};
+	int taille=10;
+	// le bug lorsqu'il y a 2 neufs a la fin dans le tab1, fait show three a la ligne 273
+	//int tab1[taille]={3,1,2,5,4,9,7,9,8,4};
+	// ca semble marcher avec tab 2 par contre
+	int tab2[taille]={3,1,2,5,4,10,7,7,10,4};
+
 	// 9 9 8 7 5 4 4 3 2 1
 
-	tri(tab, taille);
+	tri(tab2, taille);
 
 
 
