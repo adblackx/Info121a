@@ -252,7 +252,7 @@ void tri(int tab[], int n){
 	}
 
 	for (int i =0; i<n; i++){
-		cout<<tab[i]<<" ";
+		//cout<<tab[i]<<" ";
 	}
 	cout << endl;
 	showTree(t);
@@ -264,11 +264,13 @@ void tri(int tab[], int n){
 		cout<<minimum<<" ";
 		del(t, minimum);
 	}
+		showTree(t);
+
 	cout << endl;
 }
 
 int main() {
-	tree *t = (tree*) malloc (sizeof(tree));
+	/*tree *t = (tree*) malloc (sizeof(tree));
 	t -> root = newBranch(5);
 	t -> root -> left = newBranch(4);
 	t -> root -> right = newBranch(6);
@@ -288,7 +290,7 @@ int main() {
 	//showTree(t);
 	del(t, 5);
 
-	cout<<searchMin(t);
+	cout<<searchMin(t);*/
 
 	 int taille=10;
 	int tab[taille]={3,1,2,5,4,9,7,9,8,4};
