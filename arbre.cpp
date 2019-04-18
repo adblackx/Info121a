@@ -79,13 +79,14 @@ void addValRec(tree *t, int val) {
 }
 
 int searchMin(tree *t) {
+	/*
 	branch *b = t -> root;
 	while (b -> left != NULL) {
 		b = b -> left;
 	}
 
-	return b -> data;
-/*
+	return b -> data;*/
+
 	if (t -> root == NULL) return -1;
     branch *e =  t -> root;
     int min = t -> root -> data;
@@ -93,7 +94,7 @@ int searchMin(tree *t) {
         e = e -> left;
         min = e -> data;
     }
-    return min;*/
+    return min;
 }
 
 int recDeepness(branch *b) {
@@ -155,13 +156,6 @@ int contains(tree *b, int val){
 	 recContains(b -> root, val);
 }
 
-// cas 1: noeud est une feuille
-// cas 2: noeud entre dans branches avec 1 enfant
-// cas3: noeud avec 2 enfants
-// replacer 2 data
-// version recherche et supression separee
-//memoriser le parent
-
 branch *findMin(branch *b) {
 	while (b -> left != NULL) {
 		b = b -> left;
@@ -172,44 +166,56 @@ branch *findMin(branch *b) {
 branch* recDel(branch *b, int val) {
 	if (b == NULL)
 		return NULL;
-	if (val < b -> data) {  // la data est a left
+
+	if (val < b -> data) {  // le data est a gauche
 		b->left = recDel(b->left, val);
-	} else if (val > b->data) { // la data est a right
+	} else if ( val > b->data) { // le data est a droite
+		cout<<b->data<<endl;
 		b->right = recDel(b->right, val);
 	} else {
-		// case 1: pas d'enfant à la root
+		// cas 1: pas d'enfant à la root
 		if (b->left == NULL && b->right == NULL) {
-			delete(b); // wipe out the memory, in C, use free function
+			delete(b); //on efface la memoire
 			b = NULL;
 		}
-		// case 2: un enfant à right
+		// cas 2: un enfant à droite
 		else if (b->left == NULL) {
-			branch *temp = b; // save current node as a backup
+			branch *temp = b; // on enregistre le noeuf
 			b = b->right;
 			delete temp;
 		}
-		// case 3: un enfant a left
+		// cas 3: un enfant a gauche
 		else if (b->right == NULL) {
-			branch *temp = b; // save current node as a backup
+			branch *temp = b; // on enregistre le noeuf
 			b = b->left;
 			delete temp;
 		}
 		// case 4: avec deux enfants
 		else {
-			branch *temp = findMin(b -> right); // find minimal value of right sub tree
-			b->data = temp->data; // duplicate the node
-			b->right = recDel(b->right, temp->data); // delete the duplicate node
+			branch *temp = findMin(b -> right); // on cherche le minimal dans la branche a droite
+			b->data = temp->data; // on duplique le noeuf
+			b->right = recDel(b->right, temp->data); // on supprime le noeud duplique
 		}
 	}
 	return b;
 }
 
 void del(tree *t, int val) {
-	if(t -> root -> left == NULL){
-		t ->root = t-> root -> right;
-	}
 
-	recDel(t -> root, val);
+	if(t -> root -> left == NULL ){  // si tout ce qui a gauche est vide ( ou a deja ete supprime)
+		if(t -> root -> right == NULL){// si tout ce qui a droite aussi est vide ( ou a deja ete supprime) il ne reste que le root
+			t->root=NULL;
+		}
+		else{ // transfere la branche de droite a gauche, puis on supprime
+			branch *temp = findMin(t->root -> right); // on cherche le minimal dans la branche a droite
+			t->root->data = temp->data; // on duplique le noeuf
+			t->root->right = recDel(t->root->right, temp->data); // on supprime le noeud duplique
+		}
+
+	}
+	else{
+	recDel(t->root, val);
+	}
 }
 
 void ajouterVal(tree *a, int val) {
@@ -217,9 +223,7 @@ void ajouterVal(tree *a, int val) {
 	if(a->root==NULL){
 		a->root=n;
 	}
-	
 	else{
-		//branch *e = newBranch(val);
 		branch *e = a->root;
 		while(e!=NULL){
 			//cout<<"t nul"<<endl;
@@ -231,11 +235,12 @@ void ajouterVal(tree *a, int val) {
 					e=e->left;
 				}
 			}
-				else{
+			else{
 				if(e->right==NULL){
 					e->right=n;
 					break;
-				}else{
+				}
+				else{
 					e=e->right;
 				}
 			}
@@ -247,6 +252,9 @@ void ajouterVal(tree *a, int val) {
 
 
 
+
+
+
 void tri(int tab[], int n){
 	cout<<endl;
 	tree *t = (tree*) malloc (sizeof(tree));
@@ -255,25 +263,14 @@ void tri(int tab[], int n){
 		ajouterVal(t,tab[i]);
 	}
 
-	for (int i =0; i<n; i++){
-		//cout<<tab[i]<<" ";
-	}
-	cout << endl;
-	showTree(t);
-	cout << endl;
-
 	showTree(t);
 
 	for(int i=0; i<n;i++){
-
 		int minimum=searchMin(t);
 		cout<<minimum<<" ";
 		del(t, minimum);
-		//showTree(t);
-
 	}
-	//showTree(t);
-
+	
 	cout << endl;
 }
 
@@ -299,16 +296,25 @@ int main() {
 	del(t, 5);
 
 	cout<<searchMin(t);*/
+	tree *t = (tree*) malloc (sizeof(tree));
+	t -> root = newBranch(5);
+	addValRec(t, 5);
+	cout<<"premier"<<endl;
+	showTree(t);
+	//supprimer(t, 5);
+	del(t, 5);
+	cout<<"dernier"<<endl;
+	showTree(t);
 
 	int taille=10;
 	// le bug lorsqu'il y a 2 neufs a la fin dans le tab1, fait show three a la ligne 273
-	//int tab1[taille]={3,1,2,5,4,9,7,9,8,4};
+	int tab1[taille]={3,1,2,5,4,9,1,9,8,4};
 	// ca semble marcher avec tab 2 par contre
 	int tab2[taille]={3,1,2,5,4,10,7,7,10,4};
 
 	// 9 9 8 7 5 4 4 3 2 1
 
-	tri(tab2, taille);
+	tri(tab1, taille);
 
 
 
