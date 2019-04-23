@@ -40,47 +40,11 @@ void showRec(branch *b, int space) {
 	}
 }
 
-
 void showTree(tree *t) {
 	branch *b = t -> root;
 	showRec(b, 0);
 }
 
-void ajouterVal(tree *a, int val) {
-	a->nb_element++;
-	branch *n = newBranch(val);
-	if(a->root==NULL){
-		a->root=n;
-	}
-	else{
-		branch *e = a->root;
-		while(e!=NULL){
-			//cout<<"t nul"<<endl;
-			if(val < e->data){
-				if(e->left==NULL){
-					e->left=n;
-					break;
-				}else{
-					e=e->left;
-				}
-			}
-			else{
-				if(e->right==NULL){
-					e->right=n;
-					break;
-				}
-				else{
-					e=e->right;
-				}
-			}
-			
-		}
-	}
-			
-}
-
-
-// plusieurs tentative d'ajout de val dans un arbre
 /*
 void addValIter(tree *t, int val) {
 	branch *b = t -> root;
@@ -117,6 +81,13 @@ void addValRec(tree *t, int val) {
 }*/
 
 int searchMin(tree *t) {
+	/*
+	branch *b = t -> root;
+	while (b -> left != NULL) {
+		b = b -> left;
+	}
+
+	return b -> data;*/
 
 	if (t -> root == NULL) return -1;
     branch *e =  t -> root;
@@ -139,7 +110,7 @@ int recDeepness(branch *b) {
 		return 1;
 	}
 }
-// fonction pour la profondeur
+
 int deepnessRec(tree *t) {
 	return recDeepness(t -> root);
 }
@@ -183,12 +154,10 @@ int recContains(branch *b, int val){
 
 }
 
-// retour 1 si l'arbre contient l'element val
 int contains(tree *b, int val){
 	 recContains(b -> root, val);
 }
 
-// cherche la branche minimale
 branch *findMin(branch *b) {
 	while (b -> left != NULL) {
 		b = b -> left;
@@ -233,7 +202,6 @@ branch* recDel(branch *b, int val) {
 	return b;
 }
 
-// surpprimer la valeur t dans l'arbre
 void del(tree *t, int val) {
 
 	if(t -> root -> left == NULL ){  // si tout ce qui a gauche est vide ( ou a deja ete supprime)
@@ -252,23 +220,40 @@ void del(tree *t, int val) {
 	}
 }
 
-// tri un tableau à l'aide d'un arbre
-void tri(int tab[], int n){
-	cout<<endl;
-	tree *t = (tree*) malloc (sizeof(tree));
-	for(int i =0; i<n; i++){
-		ajouterVal(t,tab[i]);
+void ajouterVal(tree *a, int val) {
+	a->nb_element++;
+	branch *n = newBranch(val);
+	if(a->root==NULL){
+		a->root=n;
 	}
-
-	showTree(t);
-	for(int i=0; i<n;i++){
-		int minimum=searchMin(t);
-		cout<<minimum<<" ";
-		del(t, minimum);
+	else{
+		branch *e = a->root;
+		while(e!=NULL){
+			//cout<<"t nul"<<endl;
+			if(val < e->data){
+				if(e->left==NULL){
+					e->left=n;
+					break;
+				}else{
+					e=e->left;
+				}
+			}
+			else{
+				if(e->right==NULL){
+					e->right=n;
+					break;
+				}
+				else{
+					e=e->right;
+				}
+			}
+			
+		}
 	}
-	
-	cout << endl;
+			
 }
+
+
 
 
 int taille_sub(branch *e){
@@ -292,7 +277,7 @@ int mediane_sub(branch *e, int n){
 	
 }
 
-// retourne la valeur mediane d'un arbre
+
 int mediane_rec(tree *t){
 	if(t->root ==0)
 		return -1;
@@ -302,14 +287,68 @@ int mediane_rec(tree *t){
 
 
 
-int main() {
 
+void tri(int tab[], int n){
+	cout<<endl;
+	tree *t = (tree*) malloc (sizeof(tree));
+	t -> root = newBranch(tab[0]);
+	for(int i =1; i<n; i++){
+		ajouterVal(t,tab[i]);
+	}
+
+	showTree(t);
+
+	for(int i=0; i<n;i++){
+		int minimum=searchMin(t);
+		cout<<minimum<<" ";
+		del(t, minimum);
+	}
+	
+	cout << endl;
+}
+
+int main() {
+	/*tree *t = (tree*) malloc (sizeof(tree));
+	t -> root = newBranch(5);
+	t -> root -> left = newBranch(4);
+	t -> root -> right = newBranch(6);
+	t -> root -> left -> left = newBranch(3);
+	addValRec(t, 4);
+	addValRec(t, 4);
+	addValIter(t, 3);
+	cout << "Profondeur recursive: " << deepnessRec(t) << endl;
+	cout << "Profondeur iterative: " << deepnessIter(t) << endl;
+	showTree(t);
+	//cout<<contains(t, 6)<<endl;
+	cout<<endl;
+	addValIter(t, 7);
+	//showTree(t);
+	cout<<endl;
+	del(t, 5);
+	//showTree(t);
+	del(t, 5);
+
+	cout<<searchMin(t);
+	tree *t = (tree*) malloc (sizeof(tree));
+	t -> root = newBranch(5);
+	addValRec(t, 5);
+	cout<<"premier"<<endl;
+	showTree(t);
+	//supprimer(t, 5);
+	del(t, 5);
+	cout<<"dernier"<<endl;
+	showTree(t);*/
 
 	int taille=10;
+	// le bug lorsqu'il y a 2 neufs a la fin dans le tab1, fait show three a la ligne 273
 	int tab1[taille]={3,1,2,5,4,9,1,9,8,4};
+	// ca semble marcher avec tab 2 par contre
 	int tab2[taille]={3,1,2,5,4,10,7,7,10,4};
 	int tab3[15]={12,15,3,1,2,5,4,9,14,19,7,13,14,4,16};
 
+	// 9 9 8 7 5 4 4 3 2 1
+
+	//tri(tab2, taille);
 	cout<<endl;
 	tree *t = (tree*) malloc (sizeof(tree));
 	for(int i =0; i<15; i++){
