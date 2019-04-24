@@ -24,6 +24,7 @@ branch *newBranch(int val) {
 	return b;
 }
 
+//sous fonction pour affiche l'arbre
 void showRec(branch *b, int space) {
 	for (int i = 0; i < space; i++) {
 		if (i < space - 1)
@@ -40,7 +41,7 @@ void showRec(branch *b, int space) {
 	}
 }
 
-
+// affihce un arbre
 void showTree(tree *t) {
 	branch *b = t -> root;
 	showRec(b, 0);
@@ -144,6 +145,7 @@ int deepnessRec(tree *t) {
 	return recDeepness(t -> root);
 }
 
+//fonction pour la profondeur de facon itérative
 int deepnessIter(tree *t) {
 	branch *b = t -> root;
 	int max = 0;
@@ -167,6 +169,7 @@ int deepnessIter(tree *t) {
 	return max;
 }
 
+//sous fonction de contains
 int recContains(branch *b, int val){
 	if(b->data!=val){
 			if (val < b -> data && b->left !=NULL){
@@ -203,7 +206,6 @@ branch* recDel(branch *b, int val) {
 	if (val < b -> data) {  // le data est a gauche
 		b->left = recDel(b->left, val);
 	} else if ( val > b->data) { // le data est a droite
-		//cout<<b->data<<endl;
 		b->right = recDel(b->right, val);
 	} else {
 		// cas 1: pas d'enfant à la root
@@ -213,13 +215,13 @@ branch* recDel(branch *b, int val) {
 		}
 		// cas 2: un enfant à droite
 		else if (b->left == NULL) {
-			branch *temp = b; // on enregistre le noeuf
+			branch *temp = b; // on enregistre le noeud
 			b = b->right;
 			delete temp;
 		}
 		// cas 3: un enfant a gauche
 		else if (b->right == NULL) {
-			branch *temp = b; // on enregistre le noeuf
+			branch *temp = b; // on enregistre le noeud
 			b = b->left;
 			delete temp;
 		}
@@ -306,21 +308,42 @@ int main() {
 
 
 	int taille=10;
+	int TAILLE=15;
+
 	int tab1[taille]={3,1,2,5,4,9,1,9,8,4};
 	int tab2[taille]={3,1,2,5,4,10,7,7,10,4};
-	int tab3[15]={12,15,3,1,2,5,4,9,14,19,7,13,14,4,16};
+	int tab3[TAILLE]={12,15,3,1,2,5,4,9,14,19,7,13,14,4,16};
 
 	cout<<endl;
 	tree *t = (tree*) malloc (sizeof(tree));
-	for(int i =0; i<15; i++){
+	for(int i =0; i<TAILLE; i++){
 		ajouterVal(t,tab3[i]);
 	}
 
+	// contient letest de ajoute val, newtree et newBranch et afficher arbre
+	// ainsi que chercher minimum
 	tri(tab3,15);
-	cout<<"nombre elements: "<< t->nb_element<<endl;
+	cout<<"nombre elements: "<< t->nb_element<<endl; 
 	cout<<mediane_rec(t)<<endl;
 	//cout<<mediane_rec(t)<<endl;
-	cout<<"L'arbre contient 6 ? : "<<contains(t, 6)<<endl;
+	
+	for(int i =0; i<TAILLE; i++){
+		cout<<tab3[i]<<" ";
+	}	
+	
+	cout<<endl;
+	
+	cout<<"L'arbre contient t il : " << tab3[0] <<" : " <<contains(t, tab3[0])<<endl;
+	cout<<"L'arbre contient t il : " << tab3[TAILLE-1] <<" : " <<contains(t, tab3[TAILLE-1])<<endl;
+	cout<<"L'arbre contient t il : " << tab3[5] <<" : " <<contains(t, tab3[5])<<endl;
+
+	cout<<"Le minimum de l'arbre est : " <<searchMin(t)<<endl;
+
+
+	cout<<"L'arbre contient t il : " << 10000 <<" : " <<contains(t, 10000)<<endl;
+	cout<<"La profondeur est (iterative)  : "<<deepnessIter(t)<<endl;
+	cout<<"La profondeur est (recusrive) : "<<deepnessRec(t)<<endl;
+
 
 	//showTree(t);
 
