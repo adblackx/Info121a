@@ -235,7 +235,7 @@ branch* recDel(branch *b, int val) {
 
 // surpprimer la valeur t dans l'arbre
 void del(tree *t, int val) {
-	nb_element--;
+	t->nb_element--;
 	if(t -> root -> left == NULL ){  // si tout ce qui a gauche est vide ( ou a deja ete supprime)
 		if(t -> root -> right == NULL){// si tout ce qui a droite aussi est vide ( ou a deja ete supprime) il ne reste que le root
 			t->root=NULL;
