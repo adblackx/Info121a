@@ -170,11 +170,11 @@ int deepnessIter(tree *t) {
 int recContains(branch *b, int val){
 	if(b->data!=val){
 			if (val < b -> data && b->left !=NULL){
-				return (b->left, val);
+				return recContains(b->left, val);
 			}
 
-			else if (val < b -> data && b->right !=NULL){
-					return (b->right, val);
+			else if (val > b -> data && b->right !=NULL){
+					return recContains(b->right, val);
 			}
 			else
 			return 0;
@@ -320,6 +320,7 @@ int main() {
 	cout<<"nombre elements: "<< t->nb_element<<endl;
 	cout<<mediane_rec(t)<<endl;
 	//cout<<mediane_rec(t)<<endl;
+	cout<<"L'arbre contient 6 ? : "<<contains(t, 6)<<endl;
 
 	//showTree(t);
 
