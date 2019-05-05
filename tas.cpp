@@ -1,17 +1,16 @@
 #include <cstdlib>
 #include <iostream>
 #include <algorithm>
+#include <time.h>
+#include <random>
+
 
 using namespace std;
 
-	const int taille = 10;
-
+int nombredefois(0);
 
 int parent(int i){
-	if (i%2==0)
-		return i/2;
-	else 
-		return (i-1)/2;
+	return (i-1)/2;
 }
 
 int left(int i){
@@ -29,19 +28,34 @@ void show_tab(int tab[], int n){
 	cout<<endl;
 }
 
-void show_tas(int tab[], int n){
+void espace(int n){
+	for(int i=0; i <n; i++){
+		cout<<" ";
+	}
+}
 
-	if(n!=0)
-	cout << tab[parent(n)]<<endl;
-	cout<<" "<<tab[n]<<endl;
+void show_tas(int tab[], int n){ 
+	// est appele que pour n <= parent(TAILLE) ou TAILLE est la taille max du tab
+	// c a dire pour afficher le dernier tas
+	// affiche aussi le parent pour mieux se situer dans les branches l. 42 a l.44
+	int vide=0;
+	if(n!=0){
+		cout << tab[parent(n)]<<endl;
+	}
+
+	cout<<"P|__"<< tab[n]<<endl;
 	int gauche=left(n);
 	int droite=right(n);
-
-	if(gauche<taille){
-		cout <<"  "<< tab[left(n)]<<" ";
+	vide+=4;
+	if(gauche>n){
+		espace(vide);
+		cout <<"G|__"<< tab[left(n)]<<endl;
 	}
-	if (droite<taille)
-	cout << tab[right(n)]<<endl;
+	if (droite>n){
+		espace(vide);
+		cout <<"D|__"<< tab[right(n)]<<endl;
+
+	}
 
 }
 
@@ -68,39 +82,86 @@ void tamiser_test(int tab[], int deb, int fin){
 	}
 }
 
-void tamiser(int tab[], int deb, int fin){
-	if(left(fin)>deb and right(deb)>deb){
-
+void tamiser(int tab[], int deb, int racine){
+	nombredefois++;
+	if(left(racine)>=deb and right(racine)>=deb){
 		return ;
 	}
 
-		//nt x = max( tab[fin], max(tab[right(deb),tab[left(deb)] ));
-		int y = max(tab[right(deb)],tab[left(deb)])	;	
-		int x = max( tab[fin], y );
+	if(left(racine)==deb-1){ // ajout de ce cas
+		if(tab[left(racine)]>=tab[racine]){
+			echange(tab, racine, left(racine));
+		}
+		return ;
+	}
+	
+	int x = max(tab[right(racine)], max(tab[left(racine)], tab[racine]));
+	if(x==tab[racine]){
+		return;
+	}
+	else if(x==tab[left(racine)] ){
+		echange(tab, racine, left(racine));
+		tamiser(tab, deb, left(racine));
+	}
 
-		if(x==tab[fin]){
-			return;
-		}
-		if(x==tab[left(fin)]){
-			echange(tab, fin, left(fin));
-			tamiser(tab, deb, left(fin));
-		}
+	else if( x==tab[right(racine)]){
+		echange(tab, racine, right(racine));
+		tamiser(tab, deb, right(racine));
+	}
 }
 
-void cree_tas(int tab[], int n){
-
+void new_tas(int tab[], int n){
+	int deb= parent(n-1);   
+	while(deb>=0){
+		tamiser(tab,n, deb);
+		deb--;
+	}
 }
+
+void tri_par_tas(int tab[], int n){
+	for(int i=n; i>0; i--){
+		new_tas(tab, i);
+		echange(tab, 0, i-1);	
+	}
+}
+
+void new_tab_alea(int tab[] , int taille){
+	int alea;
+	for(int i=0; i<taille; i++){
+		alea=rand()%(1000);
+		tab[i]=alea;
+	}
+}
+
 
 int main() {
+	srand(time(NULL));
+	int alea = rand()%(1000);
+	int tab[alea];
+	new_tab_alea(tab, alea);
+	const int taille(21), taille1(23);
+	int tab1[taille]={			 5,
+								1,2,
+					 5,4,            		 9,1,
+			 	9,8,	21,20, 			90,4,	1,2,
+			 3,4, 5,6, 100,200
+		};
 
-	int tab1[taille]={3,1,2,5,4,9,1,9,8,4};
-	show_tab(tab1, taille);
-	cout<<endl;
-	show_tas(tab1, 0);
-	tamiser(tab1, 5, taille);
-	show_tas(tab1, 1);
-	show_tas(tab1, 2);
-	show_tab(tab1, taille);
+	int tab2[taille1]={3,1,2,5,4,9,1,11,8,12,15,23,14,97,12,15,26,59,417,1,523,12,14};	
+
+	tri_par_tas(tab, alea);
+	show_tab(tab, alea);
+
+	cout<<endl;	
+	//tri_par_tas(tab1, taille);
+	//show_tab(tab1, taille);
+	cout<<endl;	
+	show_tas(tab1,0);
+	cout<<endl;	
+	show_tas(tab1,2);
+	cout<<endl;	
+
+	cout<<"Nombre de recursives: "<< nombredefois <<endl;
 
 	return 0;
 }
